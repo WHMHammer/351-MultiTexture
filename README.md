@@ -2,6 +2,8 @@
 
 This repo demonstrates how to load client-side (local) image files without requiring the user to manually encode their images to base-64 or to dangerously enable cross-site scripting (XSS) in their browsers.
 
+You can compare the differences between my updated codes and the starter codes by checking this [merge request](https://github.com/WHMHammer/351-MultiTexture/pull/1/files#diff-cc42bf67247949340d7cf2b17a750c41bbe8d71179e9360a31d806a9758a13f7).
+
 ## XSS and CORS
 
 [Cross-site scripting](https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting) (XSS) is dangerous because it allows unauthorized codes to access data from a different origin. All modern browsers follow the [cross-origin resource sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) (CORS) policies given by the resource owners. Unfortunately, [all local files are treated as from different origins](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSRequestNotHttp#loading_a_local_file) due to security reasons. This protection mechanism hinders us from automatically loading anything from the users' local filesystems.
