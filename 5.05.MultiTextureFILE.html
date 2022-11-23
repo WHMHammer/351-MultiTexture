@@ -2,14 +2,27 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
+        <!-- Don't worry about the stylesheet. It's irrelevant to the Drag and Drop API -->
+        <link rel="stylesheet" href="index.css">
         <title>FILE-Multi-Textured Quad</title>
     </head>
-
     <body onload="main()">
         <canvas id="webgl" width="400" height="400">
             Please use a browser that supports "canvas"
         </canvas>
-
+        <div id="sky-loader-view">
+            <p>Load a local image as the sky texture by clicking on the button below or drag and drop the image to the sky blue region.</p>
+            <input id="sky-loader" type="file">
+        </div>
+        <div id="circle-loader-view">
+            <p>Load a local image as the circle texture by clicking on the button below or drag and drop the image to the light green region.</p>
+            <input id="circle-loader" type="file">
+        </div>
+        <div id="instructions">
+            <h2>Instructions</h2>
+            <p>Load the sky and the circle images in the resources folder one-by-one. The canvas will be all-black before you load <strong>BOTH</strong> images. Here is what you should see after loading <strong>BOTH</strong> images:</p>
+        </div>
+        <img id="screenshot" src="screenshot.png">
         <script src="lib/webgl-utils.js"></script>
         <script src="lib/webgl-debug.js"></script>
         <script src="lib/cuon-utils.js"></script>

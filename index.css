@@ -1,0 +1,40 @@
+/* Don't worry about this stylesheet. It's irrelevant to the Drag and Drop API */
+
+* {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    user-select: none;
+}
+
+body {
+    display: grid;
+    grid-template-areas:
+        "canvas sky"
+        "canvas circle"
+        "instructions screenshot"
+    ;
+    grid-template-columns: 1fr 1fr;
+}
+
+#webgl {
+    grid-area: canvas;
+}
+
+#sky-loader-view {
+    grid-area: sky;
+    background-color: skyblue;
+}
+
+#circle-loader-view {
+    grid-area: circle;
+    background-color: lightgreen;
+}
+
+#instructions {
+    grid-area: instructions;
+}
+
+#screenshot {
+    grid-area: screenshot;
+}
