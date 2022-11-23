@@ -1,4 +1,14 @@
 // MultiTexture.js (c) 2012 matsuda and kanda
+// Edited by Hanming Wang to showcase the HTML Drag and Drop API
+
+// DOM objects
+const skyLoaderViewDom = document.getElementById("sky-loader-view");
+/** @type {HTMLInputElement} */
+const skyLoaderDom = document.getElementById("sky-loader");
+const circleLoaderViewDom = document.getElementById("circle-loader-view");
+/** @type {HTMLInputElement} */
+const circleLoaderDom = document.getElementById("circle-loader");
+
 // Vertex shader program
 var VSHADER_SOURCE = `
     attribute vec4 a_Position;
@@ -119,19 +129,77 @@ function initTextures(gl, n) {
         return false;
     }
 
-    // Create the image object
-    var image0 = new Image();
-    var image1 = new Image();
-    if (!image0 || !image1) {
-        console.log('Failed to create the image object');
-        return false;
-    }
-    // Register the event handler to be called when image loading is compvared
-    image0.onload = function () { loadTexture(gl, n, texture0, u_Sampler0, image0, 0); };
-    image1.onload = function () { loadTexture(gl, n, texture1, u_Sampler1, image1, 1); };
-    // Tell the browser to load an Image
-    image0.src = 'resources/sky.jpg';
-    image1.src = 'resources/circle.gif';
+    // Method 1: load an image by clicking on a file input button
+    // The `change` event is triggered after the user selects a file from the pop-up window.
+    skyLoaderDom.addEventListener("change", (event) => {
+        // `FileReader` doc: https://developer.mozilla.org/en-US/docs/Web/API/FileReader
+        const reader = new FileReader();
+        // The `loadend` event is triggered after the file reader finishes loading the file.
+        reader.addEventListener("loadend", () => {
+            // `Image` doc: https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image
+            const image = new Image();
+            // The `loadend` event is triggered after the image finishes loading.
+            image.addEventListener("load", () => {
+                loadTexture(gl, n, texture0, u_Sampler0, image, 0);
+            })
+            // Check the next comment for what `reader.result` stores.
+            image.src = reader.result;
+        });
+        // By calling the `readAsDataURL` method, `reader.result` will store the base-64-encoded-url form of the content of the file being loaded.
+        // `FileReader.readAsDataURL` doc: https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
+        // `event.target.files` stores the **filenames** (not the contents) of the files loaded.
+        reader.readAsDataURL(event.target.files[0]);
+    });
+    // The codes below are virtually the same as those above:
+    circleLoaderDom.addEventListener("change", (event) => {
+        const reader = new FileReader();
+        reader.addEventListener("loadend", () => {
+            const image = new Image();
+            image.addEventListener("load", () => {
+                loadTexture(gl, n, texture1, u_Sampler1, image, 1);
+            })
+            image.src = reader.result;
+        });
+        reader.readAsDataURL(event.target.files[0]);
+    });
+
+    // Method 2: load an image by dragging and dropping a file
+    // The following codes are merely a simple demonstration of the HTML Drag and Drop API.
+    // Check https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API for the complete documentation and best practices.
+    // The default behavior of dragging an dropping a file to a browser is to open it with the browser. We'd like to disable that:
+    window.addEventListener("dragover", (event) => {
+        event.preventDefault();
+    });
+    window.addEventListener("drop", (event) => {
+        event.preventDefault();
+    });
+    // Now add the `drop` event handlers to the corresponding regions (HTML elements):
+    skyLoaderViewDom.addEventListener("drop", (event) => {
+        const reader = new FileReader();
+        reader.addEventListener("loadend", () => {
+            const image = new Image();
+            image.addEventListener("load", () => {
+                loadTexture(gl, n, texture0, u_Sampler0, image, 0);
+            })
+            image.src = reader.result;
+        });
+        // `event.dataTransfer.files` stores the **filenames** (not the contents) of the files loaded.
+        reader.readAsDataURL(event.dataTransfer.files[0]);
+    })
+    circleLoaderViewDom.addEventListener("drop", (event) => {
+        const reader = new FileReader();
+        reader.addEventListener("loadend", () => {
+            const image = new Image();
+            image.addEventListener("load", () => {
+                loadTexture(gl, n, texture1, u_Sampler1, image, 1);
+            })
+            image.src = reader.result;
+        });
+        reader.readAsDataURL(event.dataTransfer.files[0]);
+    })
+
+    // Clear <canvas>
+    gl.clear(gl.COLOR_BUFFER_BIT);
 
     return true;
 }
@@ -155,7 +223,7 @@ function loadTexture(gl, n, texture, u_Sampler, image, texUnit) {
     // Set the image to texture
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 
-    gl.uniform1i(u_Sampler, texUnit);   // Pass the texure unit to u_Sampler
+    gl.uniform1i(u_Sampler, texUnit);   // Pass the texture unit to u_Sampler
 
     // Clear <canvas>
     gl.clear(gl.COLOR_BUFFER_BIT);
