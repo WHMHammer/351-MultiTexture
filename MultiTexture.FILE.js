@@ -147,7 +147,7 @@ function initTextures(gl, n) {
         });
         // By calling the `readAsDataURL` method, `reader.result` will store the base-64-encoded-url form of the content of the file being loaded.
         // `FileReader.readAsDataURL` doc: https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
-        // `event.target.files` stores the **filenames** (not the contents) of the files loaded.
+        // `event.target.files` stores the files loaded.
         reader.readAsDataURL(event.target.files[0]);
     });
     // The codes below are virtually the same as those above:
@@ -183,7 +183,7 @@ function initTextures(gl, n) {
             })
             image.src = reader.result;
         });
-        // `event.dataTransfer.files` stores the **filenames** (not the contents) of the files loaded.
+        // `event.dataTransfer.files` stores the files loaded.
         reader.readAsDataURL(event.dataTransfer.files[0]);
     })
     circleLoaderViewDom.addEventListener("drop", (event) => {
